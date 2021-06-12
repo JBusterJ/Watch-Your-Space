@@ -8,11 +8,6 @@
     filter: blur(3px);
 }
 
-#slideshow {
-    height: auto;
-    width: auto;
-}
-
 #title {
     text-align: center;
     padding-top: 30px;
@@ -28,6 +23,9 @@
 
 input[type="date"]::-webkit-clear-button {
     display: none;
+}
+input[type="date"]:focus{
+    outline: none;
 }
 
 /* Removes the spin button */
@@ -76,6 +74,7 @@ table {
     padding: 0;
     width: 100%;
     table-layout: fixed;
+    border-radius: 10px;
 }
 
 table caption {
@@ -83,17 +82,14 @@ table caption {
     margin: .5em 0 .75em;
 }
 
-table tr {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    padding: .35em;
-}
-
 table th, table td {
     padding: .625em;
     text-align: center;
-    color: black;
+    color: white;
+    background: #222222;
+    /* filter: blur(10px); */
     font-family: 'Candara';
+    z-index: -2;
 }
 
 table th {
@@ -147,6 +143,7 @@ content: attr(aria-label);
     margin: 0;
     padding: 0;
     color: white;
+    user-select: none;
 }
 
 @keyframes move-clouds-back {
@@ -186,7 +183,7 @@ content: attr(aria-label);
 .twinkling {
     background: transparent url(twinkling.png) repeat top center;
     z-index: -2;
-    animation: move-twinkle-back 200s linear infinite;
+    animation: move-twinkle-back 500s linear infinite;
 }
 
 .clouds {
@@ -202,4 +199,61 @@ img {
     margin-right: auto;
     border-radius: 10px;
     padding-top: 20px;
+}
+
+#ddate {
+    width: 584px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -292px;
+}
+
+#table {
+    margin-top: 20px;
+}
+
+#slideshow {
+    height: auto;
+    width: 300px;
+}
+
+#logo {
+    font-size: 100px;
+    position: absolute;
+    margin-top: 230px;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    text-shadow: rgba(255, 162, 0, 0.75) 0px 0px 46px;
+    font-family: 'Arizonia';
+    z-index: -2;
+}
+#subtext {
+    font-size: 15px;
+    position: absolute;
+    margin-top: 300px;
+    left: 50%;
+    margin-left: 250px;
+    transform: translate(-50%, -50%);
+    text-shadow: rgba(255, 162, 0, 0.75) 0px 0px 46px;
+    font-family: 'Arizonia';
+    z-index: -2;
+}
+
+@font-face {
+    font-family: "Arizonia";
+    src: url("Arizonia-Regular.ttf");
+}
+
+#nasaCredit {
+    width: 100px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transition: 200ms;
+}
+#nasaCredit:hover {
+    width: 120px;
 }

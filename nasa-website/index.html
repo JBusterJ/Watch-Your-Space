@@ -6,44 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Yoinking information from NASA</title>
+    <title>Watch Your Space</title>
     <script>
         // Create a request variable and assign a new XMLHttpRequest object to it.
         var request = new XMLHttpRequest()
         var ul;
         var earthdate;
+        var doSlideshow = false;
 
-        // Open a new connection, using the GET request on the URL endpoint
-        request.open('GET', 'https://api.nasa.gov/planetary/apod?api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L', true)
-
-        request.onload = function () {
-            var data = JSON.parse(this.response)
-            var imgOfDay = data.hdurl;
-            var copyright = data.copyright;
-            var date = data.date;
-            date = date.split('-', 3);
-            date = date[2] + '/' + date[1] + '/' + date[0];
-            var explanation = data.explanation;
-            var title = data.title;
-            var url = data.url;
-            setValues(imgOfDay, copyright, date, explanation, title, url);
-        }
-
-        // Send request
-        request.send()
-
-        function setValues(imgofday, copyright, date, explanation, title, url) {
-            document.getElementById('image').src = imgofday;
-            document.getElementById('title').innerHTML = title.toUpperCase();
-            document.getElementById('date').innerHTML = date;
-            document.getElementById('explanation').innerHTML = explanation;
-            document.getElementById('copyright').innerHTML = 'Photo by ' + copyright;
-            ul = url;
-        }
-        function navigateToUrl(url) {
-            window.location.href = url;
-        }
-        //https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2021-6-8&api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L
         function marsRoverRequest() {
             var input = document.getElementById('ddate').value;
             var d = new Date(input);
@@ -53,22 +23,27 @@
             var day = d.getDate();
             console.log(d);
             var earthdate = year + '-' + month + '-' + day;
-            //YYYY-MM-DD
+
             request.open('GET', 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=' + earthdate + '&api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L', true)
             request.onload = function () {
                 var data = JSON.parse(this.response);
                 console.log(data.photos);
                 var photos = data.photos;
+                if (photos.length == 0) {
+                    newRowWithData(null, null, null, null, null, 0)
+                }
                 for (var i = 0; i < photos.length; i++) {
                     console.log(photos[i].rover);
-                    newRowWithData(photos[i].img_src, photos[i].camera.full_name, photos[i].sol, photos[i].rover.name, photos[i].id);
+                    newRowWithData(photos[i].img_src, photos[i].camera.full_name, photos[i].sol, photos[i].rover.name, photos[i].id, photos.length, null);
                 }
-                var x = 0;
-                var img = document.getElementById('slideshow');
-                setInterval(() => {
-                    changeImg()
-                }, 500);
-                console.log(data)
+                if (doSlideshow) {
+                    var x = 0;
+                    var img = document.getElementById('slideshow');
+                    setInterval(() => {
+                        changeImg()
+                    }, 500);
+                    console.log(data)
+                }
                 function changeImg() {
                     if (typeof (data.photos[x]) != 'undefined') {
                         img.src = data.photos[x].img_src;
@@ -76,9 +51,10 @@
                     }
                 }
             }
+
             table = document.getElementById('table');
 
-            function newRowWithData(link, camera, sol, rover, id) {
+            function newRowWithData(link, camera, sol, rover, id, length) {
                 var row = table.insertRow(table.rows.length);
                 var rowCount = table.rows.length;
                 for (var i = rowCount; i < rowCount; i++) {
@@ -89,40 +65,53 @@
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
                 var cell5 = row.insertCell(4);
+                const img = document.createElement("img");
 
-                cell1.innerHTML = link;
+                img.src = link;
+                img.id = "slideshow";
+
+                img.addEventListener("click", function () {
+                    redirect(link);
+                })
+
+                cell1.appendChild(img);
                 cell2.innerHTML = camera;
                 cell3.innerHTML = sol;
                 cell4.innerHTML = rover;
                 cell5.innerHTML = id;
+
+                if (length == 0) {
+                    cell1.innerHTML = 'No Data';
+                    cell2.innerHTML = 'No Data';
+                    cell3.innerHTML = 'No Data';
+                    cell4.innerHTML = 'No Data';
+                    cell5.innerHTML = 'No Data';
+                }
             }
             // Send request
             request.send()
         }
-    </script>
-    <style>
 
-    </style>
+        function redirect(url) {
+            window.open(url)
+        }
+    </script>
+    <link rel="icon" href="https://img.icons8.com/color/64/000000/mars-planet.png" type="image/png">
 </head>
 
 <body>
-    <h1 id="title"></h1>
-    <p id="url"></p>
-
-    <div class="container">
-        <img src="" id="image" onclick="navigateToUrl(ul)">
-        <p class="description">Click to visit image URL</p>
-    </div>
-    
-    <p id="explanation"></p>
-    <p id="date"></p>
-    <p id="copyright"></p>
-
+    <!-- https://img.icons8.com/color/64/000000/mars-planet.png -->
     <div class="stars"></div>
     <div class="twinkling"></div>
     <div class="clouds"></div>
 
-    <input type="date" id="ddate" onchange="marsRoverRequest()"><br>
+    <h1 id="logo">Watch Your Space</h1>
+    <p id="subtext">A simple space webapp</p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/2449px-NASA_logo.svg.png"
+        id="nasaCredit" onclick="redirect('https://www.nasa.gov')" data-toggle="tooltip" data-placement="bottom"
+        title="Information from: NASA(National Aeronautics and Space Administration)">
+    <input type="date" id="ddate" onchange="marsRoverRequest()">
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <img src="" id="slideshow">
     <table id="table">
         <!-- cell1.innerHTML = link;
