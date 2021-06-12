@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Yoinking information from NASA</title>
+    <script>
+        // Create a request variable and assign a new XMLHttpRequest object to it.
+        var request = new XMLHttpRequest()
+        var ul;
+        var earthdate;
+
+        // Open a new connection, using the GET request on the URL endpoint
+        request.open('GET', 'https://api.nasa.gov/planetary/apod?api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L', true)
+
+        request.onload = function () {
+            var data = JSON.parse(this.response)
+            var imgOfDay = data.hdurl;
+            var copyright = data.copyright;
+            var date = data.date;
+            date = date.split('-', 3);
+            date = date[2] + '/' + date[1] + '/' + date[0];
+            var explanation = data.explanation;
+            var title = data.title;
+            var url = data.url;
+            setValues(imgOfDay, copyright, date, explanation, title, url);
+        }
+
+        // Send request
+        request.send()
+
+        function setValues(imgofday, copyright, date, explanation, title, url) {
+            document.getElementById('image').src = imgofday;
+            document.getElementById('title').innerHTML = title.toUpperCase();
+            document.getElementById('date').innerHTML = date;
+            document.getElementById('explanation').innerHTML = explanation;
+            document.getElementById('copyright').innerHTML = 'Photo by ' + copyright;
+            ul = url;
+        }
+        function navigateToUrl(url) {
+            window.location.href = url;
+        }
+        //https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2021-6-8&api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L
+        function marsRoverRequest() {
+            var input = document.getElementById('ddate').value;
+            var d = new Date(input);
+
+            var year = d.getFullYear();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+            console.log(d);
+            var earthdate = year + '-' + month + '-' + day;
+            //YYYY-MM-DD
+            request.open('GET', 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=' + earthdate + '&api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L', true)
+            request.onload = function () {
+                var data = JSON.parse(this.response);
+                console.log(data.photos);
+                var photos = data.photos;
+                for (var i = 0; i < photos.length; i++) {
+                    console.log(photos[i].rover);
+                    newRowWithData(photos[i].img_src, photos[i].camera.full_name, photos[i].sol, photos[i].rover.name, photos[i].id);
+                }
+                var x = 0;
+                var img = document.getElementById('slideshow');
+                setInterval(() => {
+                    changeImg()
+                }, 500);
+                console.log(data)
+                function changeImg() {
+                    if (typeof (data.photos[x]) != 'undefined') {
+                        img.src = data.photos[x].img_src;
+                        x++;
+                    }
+                }
+            }
+            table = document.getElementById('table');
+
+            function newRowWithData(link, camera, sol, rover, id) {
+                var row = table.insertRow(table.rows.length);
+                var rowCount = table.rows.length;
+                for (var i = rowCount; i < rowCount; i++) {
+                    table.deleteRow(i);
+                }
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+
+                cell1.innerHTML = link;
+                cell2.innerHTML = camera;
+                cell3.innerHTML = sol;
+                cell4.innerHTML = rover;
+                cell5.innerHTML = id;
+            }
+            // Send request
+            request.send()
+        }
+    </script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <h1 id="title"></h1>
+    <p id="url"></p>
+
+    <div class="container">
+        <img src="" id="image" onclick="navigateToUrl(ul)">
+        <p class="description">Click to visit image URL</p>
+    </div>
+    
+    <p id="explanation"></p>
+    <p id="date"></p>
+    <p id="copyright"></p>
+
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="clouds"></div>
+
+    <input type="date" id="ddate" onchange="marsRoverRequest()"><br>
+    <img src="" id="slideshow">
+    <table id="table">
+        <!-- cell1.innerHTML = link;
+        cell2.innerHTML = camera;
+        cell3.innerHTML = sol;
+        cell4.innerHTML = rover;
+        cell5.innerHTML = id; -->
+        <th>img link</th>
+        <th>camera</th>
+        <th>sol (day on Mars)</th>
+        <th>rover</th>
+        <th>id</th>
+    </table>
+</body>
+
+</html>
