@@ -12,9 +12,15 @@
         var request = new XMLHttpRequest()
         var ul;
         var earthdate;
-        var doSlideshow = false;
+        var x = 0;
+        var doSlideshow = true;
+        var img = document.getElementById('slideshow');
+        var _data;
 
         function marsRoverRequest() {
+            document.getElementById('prev').style.visibility = 'visible';
+            document.getElementById('next').style.visibility = 'visible';
+
             var input = document.getElementById('ddate').value;
             var d = new Date(input);
 
@@ -27,6 +33,7 @@
             request.open('GET', 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=' + earthdate + '&api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L', true)
             request.onload = function () {
                 var data = JSON.parse(this.response);
+                _data = data;
                 console.log(data.photos);
                 var photos = data.photos;
                 if (photos.length == 0) {
@@ -37,63 +44,82 @@
                     newRowWithData(photos[i].img_src, photos[i].camera.full_name, photos[i].sol, photos[i].rover.name, photos[i].id, photos.length, null);
                 }
                 if (doSlideshow) {
-                    var x = 0;
-                    var img = document.getElementById('slideshow');
-                    setInterval(() => {
-                        changeImg()
-                    }, 500);
-                    console.log(data)
-                }
-                function changeImg() {
-                    if (typeof (data.photos[x]) != 'undefined') {
-                        img.src = data.photos[x].img_src;
-                        x++;
-                    }
+                    // setInterval(() => {
+                    //     changeImg()
+                    // }, 500);
+                    // console.log(data)
+                    next();
                 }
             }
 
             table = document.getElementById('table');
-
-            function newRowWithData(link, camera, sol, rover, id, length) {
-                var row = table.insertRow(table.rows.length);
-                var rowCount = table.rows.length;
-                for (var i = rowCount; i < rowCount; i++) {
-                    table.deleteRow(i);
-                }
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-                var cell5 = row.insertCell(4);
-                const img = document.createElement("img");
-
-                img.src = link;
-                img.id = "slideshow";
-
-                img.addEventListener("click", function () {
-                    redirect(link);
-                })
-
-                cell1.appendChild(img);
-                cell2.innerHTML = camera;
-                cell3.innerHTML = sol;
-                cell4.innerHTML = rover;
-                cell5.innerHTML = id;
-
-                if (length == 0) {
-                    cell1.innerHTML = 'No Data';
-                    cell2.innerHTML = 'No Data';
-                    cell3.innerHTML = 'No Data';
-                    cell4.innerHTML = 'No Data';
-                    cell5.innerHTML = 'No Data';
-                }
-            }
             // Send request
             request.send()
         }
 
+        function newRowWithData(link, camera, sol, rover, id, length) {
+            var row = table.insertRow(table.rows.length);
+            var rowCount = table.rows.length;
+            for (var i = rowCount; i < rowCount; i++) {
+                table.deleteRow(i);
+            }
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            const img = document.createElement("img");
+
+            img.src = link;
+            img.id = "slideshow1";
+
+            img.addEventListener("click", function () {
+                redirect(link);
+            })
+
+            cell1.appendChild(img);
+            cell2.innerHTML = camera;
+            cell3.innerHTML = sol;
+            cell4.innerHTML = rover;
+            cell5.innerHTML = id;
+
+            if (length == 0) {
+                cell1.innerHTML = 'No Data';
+                cell2.innerHTML = 'No Data';
+                cell3.innerHTML = 'No Data';
+                cell4.innerHTML = 'No Data';
+                cell5.innerHTML = 'No Data';
+            }
+        }
+
         function redirect(url) {
             window.open(url)
+        }
+
+        function prev() {
+            console.log(_data);
+            console.log(x);
+            if (typeof (_data.photos[x]) != 'undefined') {
+                if (x == 0 || x == _data.photos.length - 1) {
+                    x = 1;
+                    console.log(x);
+                } else {
+                    x--;
+                    document.getElementById('slideshow').src = _data.photos[x].img_src;
+                }
+            }
+        }
+        function next() {
+            console.log(_data);
+            console.log(x);
+            if (typeof (_data.photos[x]) != 'undefined') {
+                if (x == -1 || x == _data.photos.length - 1) {
+                    x = 0;
+                } else {
+                    x++;
+                    document.getElementById('slideshow').src = _data.photos[x].img_src;
+                }
+            }
         }
     </script>
     <link rel="icon" href="https://img.icons8.com/color/64/000000/mars-planet.png" type="image/png">
@@ -106,24 +132,29 @@
     <div class="clouds"></div>
 
     <h1 id="logo">Watch Your Space</h1>
-    <p id="subtext">A simple space webapp</p>
+    <p id="subtext">Curiosity Photos</p>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/2449px-NASA_logo.svg.png"
         id="nasaCredit" onclick="redirect('https://www.nasa.gov')" data-toggle="tooltip" data-placement="bottom"
         title="Information from: NASA(National Aeronautics and Space Administration)">
+    <p id="pb">powered by...</p>
+    <img src="JB_Logo_Cropped.jpg" id="poweredByJB" data-toggle="tooltip" data-placement="bottom"
+        title="Created by: JB (JBuster)">
     <input type="date" id="ddate" onchange="marsRoverRequest()">
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <img src="" id="slideshow">
+    <button id="prev" onclick="prev()">&#x2190;</button>
+    <button id="next" onclick="next()">&#x2192;</button>
     <table id="table">
         <!-- cell1.innerHTML = link;
         cell2.innerHTML = camera;
         cell3.innerHTML = sol;
         cell4.innerHTML = rover;
         cell5.innerHTML = id; -->
-        <th>img link</th>
-        <th>camera</th>
-        <th>sol (day on Mars)</th>
-        <th>rover</th>
-        <th>id</th>
+        <th>Image</th>
+        <th>Camera</th>
+        <th>Sol (day on Mars)</th>
+        <th>Rover</th>
+        <th>Id</th>
     </table>
 </body>
 

@@ -24,7 +24,8 @@
 input[type="date"]::-webkit-clear-button {
     display: none;
 }
-input[type="date"]:focus{
+
+input[type="date"]:focus {
     outline: none;
 }
 
@@ -195,9 +196,6 @@ content: attr(aria-label);
 
 img {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
     padding-top: 20px;
 }
 
@@ -217,6 +215,15 @@ img {
 #slideshow {
     height: auto;
     width: 300px;
+    display: block;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#slideshow1 {
+    height: auto;
+    width: 300px;
 }
 
 #logo {
@@ -230,6 +237,7 @@ img {
     font-family: 'Arizonia';
     z-index: -2;
 }
+
 #subtext {
     font-size: 15px;
     position: absolute;
@@ -254,6 +262,50 @@ img {
     right: 0px;
     transition: 200ms;
 }
+
 #nasaCredit:hover {
-    width: 120px;
+    width: 90px;
+}
+
+#poweredByJB {
+    width: 70px;
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    transition: 200ms;
+    border-radius: 50%;
+}
+
+#poweredByJB:hover {
+    width: 60px;
+}
+
+#pb {
+    font-size: 10px;
+    position: absolute;
+    top: 105px;
+    right: 24px;
+}
+
+button {
+    border-radius: 50%;
+    font-size: 50px;
+    background: transparent;
+    color: white;
+    border-style: none;
+    position: absolute;
+}
+
+#prev {
+    position: absolute;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+}
+
+#next {
+    position: absolute;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
 }
