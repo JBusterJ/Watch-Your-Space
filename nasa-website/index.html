@@ -37,11 +37,11 @@
                 console.log(data.photos);
                 var photos = data.photos;
                 if (photos.length == 0) {
-                    newRowWithData(null, null, null, null, null, 0)
+                    // newRowWithData(null, null, null, null, null, 0)
                 }
                 for (var i = 0; i < photos.length; i++) {
                     console.log(photos[i].rover);
-                    newRowWithData(photos[i].img_src, photos[i].camera.full_name, photos[i].sol, photos[i].rover.name, photos[i].id, photos.length, null);
+                    // newRowWithData(photos[i].img_src, photos[i].camera.full_name, photos[i].sol, photos[i].rover.name, photos[i].id, photos.length, null);
                 }
                 if (doSlideshow) {
                     // setInterval(() => {
@@ -140,7 +140,7 @@
     <img src="JB_Logo_Cropped.jpg" id="poweredByJB" data-toggle="tooltip" data-placement="bottom"
         title="Created by: JB (JBuster)">
     <input type="date" id="ddate" onchange="marsRoverRequest()">
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
     <img src="" id="slideshow">
     <button id="prev" onclick="prev()">&#x2190;</button>
     <button id="next" onclick="next()">&#x2192;</button>

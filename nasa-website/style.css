@@ -69,13 +69,15 @@ p::selection {
 }
 
 table {
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-collapse: collapse;
     margin: 0;
     padding: 0;
     width: 100%;
     table-layout: fixed;
     border-radius: 10px;
+    visibility: hidden;
+    border: none;
 }
 
 table caption {
@@ -145,6 +147,7 @@ content: attr(aria-label);
     padding: 0;
     color: white;
     user-select: none;
+    overflow: hidden;
 }
 
 @keyframes move-clouds-back {
@@ -196,16 +199,15 @@ content: attr(aria-label);
 
 img {
     display: block;
-    padding-top: 20px;
 }
 
 #ddate {
-    width: 584px;
+    width: 200px;
     border-radius: 10px;
     position: absolute;
-    top: 50%;
+    top: 200px;
     left: 50%;
-    margin: -25px 0 0 -292px;
+    margin: -25px 0 0 -100px;
 }
 
 #table {
@@ -214,9 +216,8 @@ img {
 
 #slideshow {
     height: auto;
-    width: 300px;
+    width: 500px;
     display: block;
-    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -227,14 +228,14 @@ img {
 }
 
 #logo {
-    font-size: 100px;
+    font-size: 60px;
     position: absolute;
-    margin-top: 230px;
+    margin-top: 100px;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
     text-shadow: rgba(255, 162, 0, 0.75) 0px 0px 46px;
-    font-family: 'Arizonia';
+    font-family: 'Arial';
     z-index: -2;
 }
 
@@ -248,6 +249,7 @@ img {
     text-shadow: rgba(255, 162, 0, 0.75) 0px 0px 46px;
     font-family: 'Arizonia';
     z-index: -2;
+    visibility: hidden;
 }
 
 @font-face {
@@ -261,6 +263,7 @@ img {
     top: 0px;
     right: 0px;
     transition: 200ms;
+    padding-top: 20px;
 }
 
 #nasaCredit:hover {
@@ -273,6 +276,7 @@ img {
     top: 100px;
     right: 20px;
     transition: 200ms;
+    padding-top: 20px;
     border-radius: 50%;
 }
 
@@ -301,6 +305,7 @@ button {
     left: 25%;
     transform: translate(-50%, -50%);
     visibility: hidden;
+    bottom: 250px;
 }
 
 #next {
@@ -308,4 +313,5 @@ button {
     left: 75%;
     transform: translate(-50%, -50%);
     visibility: hidden;
+    bottom: 250px;
 }
