@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Watch Your Space</title>
-    <script src="config.js"></script>
     <script>
         // Create a request variable and assign a new XMLHttpRequest object to it.
         var request = new XMLHttpRequest()
@@ -31,7 +30,7 @@
             console.log(d);
             var earthdate = year + '-' + month + '-' + day;
 
-            request.open('GET', 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=' + earthdate + '&api_key=' + config.API_KEY, true)
+            request.open('GET', 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=' + earthdate + '&api_key=huzDv1cEJlVET3KH3vYqm5gPR8FvYDBrsMLqp24L', true)
             request.onload = function () {
                 var data = JSON.parse(this.response);
                 _data = data;
